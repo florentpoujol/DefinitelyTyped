@@ -1,4 +1,4 @@
-// Type definitions for socket.io 1.3.5
+// Type definitions for socket.io 1.4.4
 // Project: http://socket.io/
 // Definitions by: PROGRE <https://github.com/progre/>, Damian Connolly <https://github.com/divillysausages/>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
@@ -248,6 +248,18 @@ declare module SocketIO {
 		 * @see send( ...args )
 		 */
 		write( ...args: any[] ): Namespace;
+
+		/**
+		 * Gets a list of clients
+		 * @return The default '/' Namespace
+		 */
+		clients( ...args: any[] ): Namespace;
+
+		/**
+		 * Sets the compress flag
+		 * @return The default '/' Namespace
+		 */
+		compress( ...args: any[] ): Namespace;
 	}
 	
 	/**
@@ -360,9 +372,10 @@ declare module SocketIO {
 		server: Server;
 		
 		/**
-		 * A list of all the Sockets connected to this Namespace
+		 * A dictionary of all the Sockets connected to this Namespace, where
+		 * the Socket ID is the key
 		 */
-		sockets: Socket[];
+		sockets: { [id: string]: Socket };
 		
 		/**
 		 * A dictionary of all the Sockets connected to this Namespace, where
@@ -437,6 +450,19 @@ declare module SocketIO {
 		 * @ This Namespace
 		 */
 		on( event: string, listener: Function ): Namespace;
+
+		/**
+		 * Gets a list of clients.
+		 * @return This Namespace
+		 */
+		clients( fn: Function ): Namespace;
+
+		/**
+		 * Sets the compress flag.
+		 * @param compress If `true`, compresses the sending data
+		 * @return This Namespace
+		 */
+		compress( compress: boolean ): Namespace;
 	}
 
 	/**
@@ -506,9 +532,10 @@ declare module SocketIO {
 		};
 		
 		/**
-		 * The list of rooms that this Socket is currently in
+		 * The list of rooms that this Socket is currently in, where
+		 * the ID the the room ID
 		 */
-		rooms: string[];
+		rooms: { [id: string]: string };
 		
 		/**
 		 * Is the Socket currently connected?
@@ -702,6 +729,13 @@ declare module SocketIO {
 		 * @return An array of callback Functions, or an empty array if we don't have any
 		 */
 		listeners( event: string ):Function[];
+
+		/**
+		 * Sets the compress flag
+		 * @param compress If `true`, compresses the sending data
+		 * @return This Socket
+		 */
+		compress( compress: boolean ): Socket;
 	}
 	
 	/**
@@ -809,10 +843,10 @@ declare module SocketIO {
 		request: any;
 		
 		/**
-		 * The list of sockets currently connect via this client (i.e. to different
-		 * namespaces)
+		 * The dictionary of sockets currently connect via this client (i.e. to different
+		 * namespaces) where the Socket ID is the key
 		 */
-		sockets: Socket[];
+		sockets: {[id: string]: Socket};
 		
 		/**
 		 * A dictionary of all the namespaces for this client, with the Socket that
